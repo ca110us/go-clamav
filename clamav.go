@@ -1,7 +1,7 @@
 // Use of this source code is governed by a
 // license that can be found in the LICENSE file.
 
-// Package clamav is go wrapper for libclamav see https://docs.clamav.net/manual/Development/libclamav.html
+// Package go-clamav is go wrapper for libclamav see https://docs.clamav.net/manual/Development/libclamav.html
 package goclamav
 
 /*
