@@ -149,7 +149,7 @@ func (c *Clamav) CompileEngine() error {
 	return nil
 }
 
-// SetNum sets a number in the specified field of the engine configuration.
+// EngineSetNum sets a number in the specified field of the engine configuration.
 // Certain fields accept only 32-bit numbers, silently truncating the higher bits
 // of the engine config. See dat.go for more information.
 func (c *Clamav) EngineSetNum(field EngineField, num uint64) error {
@@ -162,7 +162,7 @@ func (c *Clamav) EngineSetNum(field EngineField, num uint64) error {
 	return nil
 }
 
-// GetNum acquires a number from the specified field of the engine configuration. Tests show that
+// EngineGetNum acquires a number from the specified field of the engine configuration. Tests show that
 // the ClamAV library will not overflow 32-bit fields, so a GetNum on a 32-bit field can safely be
 // cast to uint32.
 func (c *Clamav) EngineGetNum(field EngineField) (uint64, error) {
@@ -183,7 +183,7 @@ func (c *Clamav) Free() int {
 	return int(C.cl_engine_free((*C.struct_cl_engine)(c.engine)))
 }
 
-// ScanMapCb scans custom data
+// ScanMapCB scans custom data
 func (c *Clamav) ScanMapCB(fmap *Fmap, fileName string, context interface{}) (uint, string, error) {
 	var scanned C.ulong
 	var virusName *C.char
@@ -235,7 +235,7 @@ func (c *Clamav) ScanFile(path string) (uint, string, error) {
 	return 0, "", Strerr(ret)
 }
 
-// ScanFileCb scans a single file for viruses using the ClamAV databases and using callbacks from
+// ScanFileCB scans a single file for viruses using the ClamAV databases and using callbacks from
 // ClamAV to read/resolve file data. The callbacks can be used to scan files in memory, to scan multiple
 // files inside archives, etc. The function returns the number of bytes
 // read from the file (if found), the virus name and an error code.

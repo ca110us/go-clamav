@@ -19,7 +19,7 @@ apt-get update && apt-get install -y \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Download the source from the clamav [downloads page](https://www.clamav.net/downloads)
+从 clamav 官方下载源码 [downloads page](https://www.clamav.net/downloads)
 
 ```bash
 tar xzf clamav-[ver].tar.gz
