@@ -1,4 +1,5 @@
 # go-clamav
+[![GoDoc](https://pkg.go.dev/badge/github.com/ca110us/go-clamav?status.svg)](https://pkg.go.dev/github.com/ca110us/go-clamav?tab=doc)
 
 go-clamav is go wrapper for [libclamav](https://docs.clamav.net/manual/Development/libclamav.html)
 
@@ -35,7 +36,70 @@ sudo cmake --build . --target install
 For other Linux distributions, see [clamav documentation](https://docs.clamav.net/manual/Installing/Installing-from-source-Unix.html)
 
 ## Quick Start
-Refer to the `example` directory
+```bash
+$ cd example && cat main.go
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	clamav "github.com/ca110us/go-clamav"
+)
+
+func main() {
+	// new clamav instance
+	c := new(clamav.Clamav)
+	err := c.Init(clamav.SCAN_OPTIONS{
+		General:   0,
+		Parse:     clamav.CL_SCAN_PARSE_ARCHIVE | clamav.CL_SCAN_PARSE_ELF,
+		Heuristic: 0,
+		Mail:      0,
+		Dev:       0,
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	// free clamav memory
+	defer c.Free()
+
+	// load db
+	signo, err := c.LoadDB("./db", uint(clamav.CL_DB_DIRECTORY))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("db load succeed:", signo)
+
+	// compile engine
+	err = c.CompileEngine()
+	if err != nil {
+		panic(err)
+	}
+
+	c.EngineSetNum(clamav.CL_ENGINE_MAX_SCANSIZE, 1024*1024*40)
+	c.EngineSetNum(clamav.CL_ENGINE_PCRE_MAX_FILESIZE, 1024*1024*20)
+	c.EngineSetNum(clamav.CL_ENGINE_MAX_SCANTIME, 9000)
+	c.EngineSetNum(clamav.CL_ENGINE_PCRE_MATCH_LIMIT, 1000)
+	c.EngineSetNum(clamav.CL_ENGINE_PCRE_RECMATCH_LIMIT, 500)
+
+	// fmt.Println(c.EngineGetNum(clamav.CL_ENGINE_PCRE_RECMATCH_LIMIT))
+
+	// scan
+	scanned, msg, err := c.ScanFile("./test_file/nmap")
+	fmt.Println(scanned, msg, err)
+}
+```
+
+```bash
+$ go run main.go
+
+db load succeed: 9263
+209 YARA.Unix_Packer_UpxDetail.UNOFFICIAL Virus(es) detected
+```
 
 ## Reference
 [mirtchovski/clamav](https://github.com/mirtchovski/clamav)
