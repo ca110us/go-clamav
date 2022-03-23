@@ -81,16 +81,12 @@ func main() {
 	}
 
 	c.EngineSetNum(clamav.CL_ENGINE_MAX_SCANSIZE, 1024*1024*40)
-	c.EngineSetNum(clamav.CL_ENGINE_PCRE_MAX_FILESIZE, 1024*1024*20)
 	c.EngineSetNum(clamav.CL_ENGINE_MAX_SCANTIME, 9000)
-	c.EngineSetNum(clamav.CL_ENGINE_PCRE_MATCH_LIMIT, 1000)
-	c.EngineSetNum(clamav.CL_ENGINE_PCRE_RECMATCH_LIMIT, 500)
-
-	// fmt.Println(c.EngineGetNum(clamav.CL_ENGINE_PCRE_RECMATCH_LIMIT))
+	// fmt.Println(c.EngineGetNum(clamav.CL_ENGINE_MAX_SCANSIZE))
 
 	// scan
-	scanned, msg, err := c.ScanFile("./test_file/nmap")
-	fmt.Println(scanned, msg, err)
+	scanned, virusName, ret := c.ScanFile("./test_file/nmap")
+	fmt.Println(scanned, virusName, ret)
 }
 ```
 
