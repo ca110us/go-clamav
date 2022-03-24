@@ -15,8 +15,6 @@ apt-get update && apt-get install -y \
   libncurses5-dev libpcre2-dev libssl-dev libxml2-dev zlib1g-dev
 
   python3 -m pip install --user cmake / apt-get install cmake
-
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 从 clamav 官方下载源码 [downloads page](https://www.clamav.net/downloads)
