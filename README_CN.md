@@ -34,6 +34,7 @@ sudo cmake --build . --target install
 其他 Linux 发行版参照 [clamav documentation](https://docs.clamav.net/manual/Installing/Installing-from-source-Unix.html)
 
 ## 快速开始
+### 动态链接
 ```bash
 $ cd example && cat main.go
 ```
@@ -89,10 +90,29 @@ func main() {
 ```
 
 ```bash
-$ go run main.go
+$ CGO_LDFLAGS="-L/usr/local/lib -lclamav" go run main.go
 
 db load succeed: 9263
 209 YARA.Unix_Packer_UpxDetail.UNOFFICIAL Virus(es) detected
+```
+
+如果找不到 `libclamav.so` 文件，尝试如下：
+
+```bash
+$ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib CGO_LDFLAGS="-L/usr/local/lib -lclamav" go run main.go
+
+db load succeed: 9263
+209 YARA.Unix_Packer_UpxDetail.UNOFFICIAL Virus(es) detected
+```
+
+### 静态编译
+```bash
+sudo bash ./prepare.sh
+
+export CGO_CFLAGS="-g -Wall -I./clamav-mussels-cookbook/mussels/install/include"
+export CGO_LDFLAGS="-L./clamav-mussels-cookbook/mussels/install/lib -lclamav_static -lbz2_static -lclammspack_static -lclamunrar_iface_static -lclamunrar_static -lcrypto -ljson-c -lpcre2-8 -lpcre2-posix -lssl -lxml2 -lz -lm -ldl -lstdc++"
+
+CGO_ENABLED=1 go build --ldflags '--extldflags "-static -fpic"' main.go
 ```
 
 ## 参考
