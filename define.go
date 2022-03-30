@@ -1,9 +1,6 @@
 package goclamav
 
 /*
-#cgo CFLAGS: -g -Wall
-#cgo LDFLAGS: -L/usr/local/lib/ -lclamav
-
 #include <clamav.h>
 #include <stdlib.h>
 */
