@@ -198,7 +198,7 @@ func (c *Clamav) ScanMapCB(fmap *Fmap, fileName string, context interface{}) (ui
 	defer CloseMemory(fmap)
 	// clean
 	if ret == CL_SUCCESS {
-		return 0, "", nil
+		return uint(scanned), "", nil
 	}
 	// virus
 	if ret == CL_VIRUS {
