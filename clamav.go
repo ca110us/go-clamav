@@ -176,8 +176,12 @@ func (c *Clamav) EngineGetNum(field EngineField) (uint64, error) {
 
 // Free the memory allocated to clamav instance, Free should be called
 // when the engine is no longer in use.
-func (c *Clamav) Free() int {
-	return int(C.cl_engine_free((*C.struct_cl_engine)(c.engine)))
+func (c *Clamav) Free() error {
+	ret := ErrorCode(C.cl_engine_free((*C.struct_cl_engine)(c.engine)))
+	if ret == CL_SUCCESS {
+		return nil
+	}
+	return Strerr(ret)
 }
 
 // ScanMapCB scans custom data
