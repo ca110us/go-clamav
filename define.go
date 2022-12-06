@@ -125,7 +125,7 @@ const CL_INIT_DEFAULT C.uint = C.CL_INIT_DEFAULT
 
 // Wraps the corresponding error message
 func Strerr(code ErrorCode) error {
-	err := errors.New(C.GoString(C.cl_strerror(C.int(code))))
+	err := errors.New(C.GoString(C.cl_strerror(C.cl_error_t(code))))
 	return err
 }
 
