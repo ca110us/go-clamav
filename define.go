@@ -3,6 +3,15 @@ package goclamav
 /*
 #include <clamav.h>
 #include <stdlib.h>
+
+// TODO: Once the older signature for cl_strerr in clamav.h goes away:
+//      extern const char *cl_strerror(int clerror);
+//   one can remove this wrapper function.  Without it, Golang will not compile
+//   on systems with an older header file.  In June 2025 this was found to be
+//   the case on Amazon linux 2023.
+const char* local_cl_strerror(cl_error_t clerror) {
+  return cl_strerror(clerror);
+}
 */
 import "C"
 import "errors"
@@ -125,7 +134,7 @@ const CL_INIT_DEFAULT C.uint = C.CL_INIT_DEFAULT
 
 // Wraps the corresponding error message
 func Strerr(code ErrorCode) error {
-	err := errors.New(C.GoString(C.cl_strerror(C.cl_error_t(code))))
+	err := errors.New(C.GoString(C.local_cl_strerror(C.cl_error_t(code))))
 	return err
 }
 
